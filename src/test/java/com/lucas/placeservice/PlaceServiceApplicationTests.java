@@ -8,27 +8,43 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class PlaceServiceApplicationTests {
-	@Autowired
-	WebTestClient webTestClient;
+    @Autowired
+    WebTestClient webTestClient;
 
-	@Test
-	public void testCreatePlaceSuccess() {
-		var name = "Valid Name";
-		var state = "Valid State";
-		var slug = "valid-name";
+    @Test
+    public void testCreatePlaceSuccess() {
+        var name = "Valid Name";
+        var state = "Valid State";
+        var slug = "valid-name";
 
-		webTestClient
-				.post()
-				.uri("/places")
-				.bodyValue(
-						new PlaceRequest(name, state)
-				)
-				.exchange()
-				.expectBody()
-				.jsonPath("name").isEqualTo(name)
-				.jsonPath("state").isEqualTo(state)
-				.jsonPath("slug").isEqualTo(slug)
-				.jsonPath("createdAt").isNotEmpty()
-				.jsonPath("updatedAt").isNotEmpty();
-	}
+        webTestClient
+                .post()
+                .uri("/places")
+                .bodyValue(
+                        new PlaceRequest(name, state)
+                )
+                .exchange()
+                .expectBody()
+                .jsonPath("name").isEqualTo(name)
+                .jsonPath("state").isEqualTo(state)
+                .jsonPath("slug").isEqualTo(slug)
+                .jsonPath("createdAt").isNotEmpty()
+                .jsonPath("updatedAt").isNotEmpty();
+    }
+
+    @Test
+    public void testCreatePlaceFailure() {
+        var name = "";
+        var state = "";
+        var slug = "";
+
+        webTestClient
+                .post()
+                .uri("/places")
+                .bodyValue(
+                        new PlaceRequest(name, state)
+                )
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
 }
