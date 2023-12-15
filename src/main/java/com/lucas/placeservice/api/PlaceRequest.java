@@ -1,4 +1,6 @@
 package com.lucas.placeservice.api;
 
-public record PlaceRequest(String name, String state) {
+import jakarta.validation.constraints.NotBlank;
+
+public record PlaceRequest(@NotBlank String name, @NotBlank String state) {
 }
